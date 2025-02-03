@@ -28,6 +28,6 @@ public class FirstSchedule {
                 .addString("date", date)
                 .toJobParameters();
 
-        jobLauncher.run(jobRegistry.getJob("firstJob"), jobParameters);
+        jobLauncher.run(jobRegistry.getJob("entitySyncJob"), jobParameters);
     }
 }

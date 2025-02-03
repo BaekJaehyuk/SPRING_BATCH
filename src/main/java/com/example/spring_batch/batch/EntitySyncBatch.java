@@ -24,7 +24,7 @@ import java.util.Map;
 
 @Configuration
 @RequiredArgsConstructor
-public class TableToTableBatch {
+public class EntitySyncBatch {
 
     private final JobRepository jobRepository;
     private final PlatformTransactionManager platformTransactionManager;
@@ -32,15 +32,15 @@ public class TableToTableBatch {
     private final AfterRepository afterRepository;
 
     @Bean
-    public Job firstJob() {
-        return new JobBuilder("firstJob", jobRepository)
-                .start(firstStep())
+    public Job entitySyncJob() {
+        return new JobBuilder("entitySyncJob", jobRepository)
+                .start(entitySyncStep())
                 .build();
     }
 
     @Bean
-    public Step firstStep() {
-        return new StepBuilder("firstStep", jobRepository)
+    public Step entitySyncStep() {
+        return new StepBuilder("entitySyncStep", jobRepository)
                 .<BeforeEntity, AfterEntity> chunk(10, platformTransactionManager)
                 .reader(beforeReader())
                 .processor(middleProcessor())
@@ -50,7 +50,6 @@ public class TableToTableBatch {
 
     @Bean
     public RepositoryItemReader<BeforeEntity> beforeReader() {
-
         return new RepositoryItemReaderBuilder<BeforeEntity>()
                 .name("beforeReader")
                 .pageSize(10)
@@ -62,7 +61,6 @@ public class TableToTableBatch {
 
     @Bean
     public ItemProcessor<BeforeEntity, AfterEntity> middleProcessor() {
-
         return new ItemProcessor<BeforeEntity, AfterEntity>() {
             @Override
             public AfterEntity process(BeforeEntity item) {

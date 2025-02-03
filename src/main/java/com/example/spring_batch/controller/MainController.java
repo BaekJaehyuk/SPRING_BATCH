@@ -18,14 +18,25 @@ public class MainController {
     private final JobLauncher jobLauncher;
     private final JobRegistry jobRegistry;
 
-    @GetMapping("/first")
+    @GetMapping("/sync")
     public String firstApi(@RequestParam("value") String value) throws Exception {
 
         JobParameters jobParameters = new JobParametersBuilder()
                 .addString("date", value)
                 .toJobParameters();
 
-        jobLauncher.run(jobRegistry.getJob("firstJob"), jobParameters);
+        jobLauncher.run(jobRegistry.getJob("entitySyncJob"), jobParameters);
+        return "ok";
+    }
+
+    @GetMapping("/alter")
+    public String secondApi(@RequestParam("value") String value) throws Exception {
+
+        JobParameters jobParameters = new JobParametersBuilder()
+                .addString("date", value)
+                .toJobParameters();
+
+        jobLauncher.run(jobRegistry.getJob("winRewardJob"), jobParameters);
         return "ok";
     }
 }

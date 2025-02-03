@@ -47,7 +47,6 @@ public class DataDBConfig {
     public PlatformTransactionManager dataTransactionManager() {
 
         JpaTransactionManager transactionManager = new JpaTransactionManager();
-
         transactionManager.setEntityManagerFactory(dataEntityManagerBean().getObject());
 
         return transactionManager;
